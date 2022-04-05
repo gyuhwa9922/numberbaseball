@@ -53,7 +53,8 @@
             if(!checkInput(value)){
                 return;
             }
-            if(answer.join('') === value){ //.join 은 배열안의 값들이 ,로 되어있는걸
+            if(answer.join('') === value){ 
+                //.join 은 배열안의 값들이 ,로 되어있는걸
                 // ''를 넣음으로서 문자열로 바꿈
                 $logs.textContent = '홈런!';
                 return;
@@ -63,13 +64,29 @@
                 $logs.appendChild(message);
                 return;
             }
-          if(checkInput(value)){//입력값이 문제가 없을 경우
-            tries.push(value);
-          }else{ //입력값이 문제가 있을 경우
 
-          }
+            let strike = 0;
+            let ball = 0;
+            let out = 0;
+            for (let i = 0; i < answer.length; i++) {
+                const index = value.indexOf(answer[i]); 
+                /* indexof는 배열이나 문자열에 원하는 값이 들어 있는지 찾는 메서드*/
+                if (index > -1) {
+                    if (index === i) { // 자릿수도 같음
+                        strike += 1;
+                    } else { // 숫자만 같음
+                        ball += 1; 
+                    }
+                }else{
+                    out +=1;
+                    if(out === 3){
+                        const message = document.createTextNode(`패배하셨습니다. 정답은 ${answer.join('')}`);
+                    }
+                }
+            }
+            $logs.append(`${value}: ${strike} 스트라이크 ${ball} 볼 ${out} 아웃`, document.createElement('br'));
+            tries.push(value);
         });
     </script>
-    
 </body>
 </html>
