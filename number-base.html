@@ -24,11 +24,10 @@
         }
         const answer = [];
         for(let n =0; n<4; n+=1){
-            const index = math.floor(math.random() * numbers.length);
+            const index = Math.floor(Math.random() * numbers.length);
             //0~8까지의 정수를 index에 랜덤변수의 내림값을 저장
             answer.push(numbers[index]);
             numbers.splice(index,1);
-            
         }
         console.log(answer);
 
@@ -37,7 +36,7 @@
             if(input.length !== 4){ //입력한 숫자가 4자리 숫자가 아닐 경우
                 return alert('4자리의 숫자를 입력하세요');
             }
-            if(new Set(input).size){ // 중복된 숫자가 있는지(사용자)
+            if(new Set(input).size !==4){ // 중복된 숫자가 있는지(사용자)
                 return alert('중복되지 않게 입력해 주세요');
             }
             if(tries.includes(input)){ //이미 입력한 값이면.
@@ -45,7 +44,7 @@
             }
             return true;
         }
-
+        let out = 0;
         $form.addEventListener('submit',(event) =>{
           event.preventDefault();
           const value = $input.value;
@@ -67,7 +66,6 @@
 
             let strike = 0;
             let ball = 0;
-            let out = 0;
             for (let i = 0; i < answer.length; i++) {
                 const index = value.indexOf(answer[i]); 
                 /* indexof는 배열이나 문자열에 원하는 값이 들어 있는지 찾는 메서드*/
@@ -77,14 +75,19 @@
                     } else { // 숫자만 같음
                         ball += 1; 
                     }
-                }else{
-                    out +=1;
-                    if(out === 3){
-                        const message = document.createTextNode(`패배하셨습니다. 정답은 ${answer.join('')}`);
-                    }
                 }
             }
-            $logs.append(`${value}: ${strike} 스트라이크 ${ball} 볼 ${out} 아웃`, document.createElement('br'));
+            if(strike === 0 && ball === 0){
+                out ++;
+                $logs.append(`${value}: ${out} 아웃`,document.createElement('br'));
+            }else{
+                $logs.append(`${value}: ${strike} 스트라이크 ${ball} 볼`, document.createElement('br'));
+            }
+            if(out === 3){
+                const message = document.createTextNode(`3아웃으로 패배하셨습니다. 정답은 ${answer.join('')}`);
+                $logs.appendChild(message);
+                return;
+            }
             tries.push(value);
         });
     </script>
